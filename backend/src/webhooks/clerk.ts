@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import { getEnv } from "../lib/env";
 import { db } from "../db";
 import { users } from "../db/schema";
