@@ -10,6 +10,7 @@ import keepAppAlive from "./lib/cron";
 import meRouter from "./routes/meRoute";
 import productRouter from "./routes/productRoute";
 import streamRouter from "./routes/streamRoute";
+import checkoutRouter from "./routes/checkoutRoute";
 
 const env = getEnv();
 const app = express();
@@ -17,9 +18,13 @@ const app = express();
 const rawJson = express.raw({ type: "application/json", limit: "1mb" });
 
 // it must mention before the express.json() middleware, otherwise it will not work
-app.post("/webhook/clerk", rawJson, (req, res) => {
+app.post("/webhooks/clerk", rawJson, (req, res) => {
   void clerkWebhookHandler(req, res);
 });
+
+// app.post("/webhooks/polar", rawJson, (req, res) => {
+//   void polarWebhookHandler(req, res);
+// });
 
 app.use(express.json());
 app.use(cors());
@@ -33,6 +38,7 @@ app.get("/health", (_req, res) => {
 app.use("/api/me", meRouter);
 app.use("/api/products", productRouter);
 app.use("/api/stream", streamRouter);
+app.use("/api/checkout", checkoutRouter);
 
 const publicDir = path.join(process.cwd(), "public");
 if (fs.existsSync(publicDir)) {
