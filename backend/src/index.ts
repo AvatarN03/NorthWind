@@ -13,6 +13,10 @@ import streamRouter from "./routes/streamRoute";
 import checkoutRouter from "./routes/checkoutRoute";
 import { polarWebhookHandler } from "./webhooks/polar";
 
+
+import * as Sentry from "@sentry/node";
+import { sentryClerkUserMiddleware } from "./middleware/sentryClerkUser.";
+
 const env = getEnv();
 const app = express();
 
@@ -30,6 +34,7 @@ app.post("/webhooks/polar", rawJson, (req, res) => {
 app.use(express.json());
 app.use(cors());
 app.use(clerkMiddleware());
+app.use(sentryClerkUserMiddleware);
 
 // unused variable can be written as _ to avoid eslint error
 app.get("/health", (_req, res) => {
@@ -54,6 +59,19 @@ if (fs.existsSync(publicDir)) {
     res.sendFile(path.join(publicDir, "index.html"), (err) => next(err));
   });
 }
+
+// sentry will be attached to the response object
+Sentry.setupExpressErrorHandler(app);
+app.use(
+  (_err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+    const sentryId = (res as express.Response & { sentry?: string }).sentry;
+
+    res.status(500).json({
+      error: "Internal server error",
+      ...(sentryId !== undefined && { sentryId }),
+    });
+  },
+);
 
 app.listen(env.PORT, () => {
   console.log(`Server is running on port ${env.PORT}`);
