@@ -9,7 +9,8 @@
     "start": "node --import ./src/instrument.ts dist/index.js",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
-    "db:pull": "drizzle-kit pull"
+    "db:pull": "drizzle-kit pull",
+    "db:seed":"tsx scripts/seed.ts"
   },
   "keywords": [],
   "author": "",
