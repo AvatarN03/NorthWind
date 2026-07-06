@@ -16,6 +16,7 @@ meRouter.get("/", async (req, res, next) => {
     }
 
     const user = await getLocalUser(userId);
+    console.log("user", user);
 
     res.json({ user });
   } catch (e) {
