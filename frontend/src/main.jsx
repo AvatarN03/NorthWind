@@ -14,6 +14,7 @@ import { SentryErrorFallback } from "./components/SentryErrorFallback.jsx";
 import { SentryUserSync } from './components/SentryUserSync.jsx';
 
 const queryClient = new QueryClient();
+const publishableKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 const apiBase = import.meta.env.VITE_API_URL ?? "";
 const tracePropagationTargets =
@@ -41,7 +42,7 @@ Sentry.init({
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ClerkProvider>
+    <ClerkProvider publishableKey={publishableKey}>
       <SentryUserSync />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
