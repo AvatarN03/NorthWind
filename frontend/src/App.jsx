@@ -1,15 +1,16 @@
-import { Show, SignInButton, SignUpButton, useAuth, UserButton } from "@clerk/react";
+import { useAuth} from "@clerk/react";
 import { Routes, Route, Navigate } from "react-router";
 
 import PageLoader from "./components/PageLoader";
 import { Layout } from "./components/Layout";
 import HomePage from "./pages/HomePage";
 import CartPage from "./pages/CartPage";
+import OrdersPage from "./pages/OrdersPage";
 
 
 function App() {
 
-  const { isLoaded } = useAuth();
+  const { isSignedIn, isLoaded } = useAuth();
 
   if (!isLoaded) {
     return <PageLoader />;
@@ -21,12 +22,12 @@ function App() {
         <Routes>
        <Route path="/" element={<HomePage />} />
           <Route path="/cart" element={<CartPage />} />
-      {/*
-          <Route path="/product/:slug" element={<ProductDetailPage />} />
           <Route
             path="/orders"
             element={isSignedIn ? <OrdersPage /> : <Navigate to={"/"} replace />}
           />
+      {/*
+          <Route path="/product/:slug" element={<ProductDetailPage />} />
           <Route path="/checkout/return" element={<CheckoutReturnPage />} />
 
           <Route path="/demo-sentry" element={<SentryDemoPage />} />
