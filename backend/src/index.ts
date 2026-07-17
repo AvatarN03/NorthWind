@@ -67,7 +67,13 @@ if (fs.existsSync(publicDir)) {
 // sentry will be attached to the response object
 Sentry.setupExpressErrorHandler(app);
 app.use(
-  (_err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  (err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+     console.error(err);
+
+    if (res.headersSent) {
+      return;
+    }
+
     const sentryId = (res as express.Response & { sentry?: string }).sentry;
 
     res.status(500).json({

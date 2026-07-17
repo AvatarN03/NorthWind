@@ -91,7 +91,7 @@ export const createCheckout = async (
         userId: localUser.id,
         lines,
         totalCents,
-        currency: "usd",
+        currency: "inr",
       })
       .returning();
 
@@ -104,7 +104,7 @@ export const createCheckout = async (
         [env.POLAR_CHECKOUT_PRODUCT_ID]: [
           {
             amount_type: "fixed",
-            price_currency: "usd",
+            price_currency: "inr",
             price_amount: totalCents,
           },
         ],
@@ -125,7 +125,7 @@ export const createCheckout = async (
 
     
   } catch (error) {
+    console.log("Polar:", error);
     next(error);
-    res.status(500).json({ error: "Internal server error" });
   }
 };
