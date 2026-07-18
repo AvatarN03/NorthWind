@@ -120,7 +120,7 @@ const OrderDetailPage = () => {
                 ) : null}
 
                 <div className="mt-5">
-                    // passing the context to child 
+                    {/* // passing the context to child  */}
                     <Outlet context={{ order, items, paid }} />
                 </div>
             </div>
